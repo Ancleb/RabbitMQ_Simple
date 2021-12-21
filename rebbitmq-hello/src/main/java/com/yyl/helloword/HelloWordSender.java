@@ -21,7 +21,7 @@ public class HelloWordSender {
 
     public static void main( String[] args ) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("abstract", "2692440667"));
+        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("guest", "guest"));
         connectionFactory.setVirtualHost("/Abstract");
         // 默认ssl端口5671
         connectionFactory.setHost("www.youngeryang.top");

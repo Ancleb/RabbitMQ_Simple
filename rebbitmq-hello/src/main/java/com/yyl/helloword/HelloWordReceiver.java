@@ -29,7 +29,7 @@ public class HelloWordReceiver {
         connectionFactory.setPort(5672);
         // 默认virtualHost：/
         connectionFactory.setVirtualHost("/Abstract");
-        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("abstract", "2692440667"));
+        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("guest", "guest"));
         // consumer不能将connection和channel放到try-with-block语句中。流一旦被关闭，程序将执行结束。
         Connection connection = connectionFactory.newConnection();
         System.out.println("connection.getChannelMax() = " + connection.getChannelMax());
