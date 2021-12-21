@@ -1,4 +1,4 @@
-package com.yyl;
+package com.yyl.helloword;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
  * Hello world!
  *
  */
-public class HelloSender {
+public class HelloWordSender {
 
     private static final String QUEUE_NAME = "hello_queue";
 

@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c8e279ea-9a08-4aa2-9b50-cf868284f268" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/rebbitmq-hello.iml" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/rebbitmq-hello.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloRabbitMq.java" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/helloword/HelloWordReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/helloword/HelloWordSender.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,25 +75,18 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2045977" />
     <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
-  <component name="RunManager" selected="Application.HelloSender">
-    <configuration name="HelloReceiver (1)" type="Application" factoryName="Application" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.yyl.HelloReceiver" />
-      <module name="rebbitmq-hello" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.yyl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.WorkQueueSender">
     <configuration name="HelloReceiver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.yyl.HelloReceiver" />
       <module name="rebbitmq-hello" />
@@ -107,12 +100,77 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="HelloSender" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.yyl.HelloSender" />
+    <configuration name="HelloWordReceiver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.helloword.HelloWordReceiver" />
+      <module name="rebbitmq-hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yyl.helloword.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HelloWordReceiver" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.HelloWordReceiver" />
       <module name="rebbitmq-hello" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.yyl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HelloWordSender" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.helloword.HelloWordSender" />
+      <module name="rebbitmq-hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yyl.helloword.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WorkQueueSender" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.workqueue.WorkQueueSender" />
+      <module name="rebbitmq-hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yyl.workqueue.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WorkQueueWorker1" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.workqueue.WorkQueueWorker" />
+      <module name="rebbitmq-hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yyl.workqueue.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WorkQueueWorker2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.yyl.workqueue.WorkQueueWorker" />
+      <module name="rebbitmq-hello" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yyl.workqueue.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -215,14 +273,18 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.HelloReceiver (1)" />
-      <item itemvalue="Application.HelloReceiver" />
-      <item itemvalue="Application.HelloSender" />
+      <item itemvalue="Application.WorkQueueWorker2" />
+      <item itemvalue="Application.HelloWordSender" />
+      <item itemvalue="Application.HelloWordReceiver" />
+      <item itemvalue="Application.WorkQueueSender" />
+      <item itemvalue="Application.WorkQueueWorker1" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.HelloSender" />
-        <item itemvalue="Application.HelloReceiver" />
+        <item itemvalue="Application.WorkQueueWorker1" />
+        <item itemvalue="Application.WorkQueueSender" />
+        <item itemvalue="Application.HelloWordReceiver" />
+        <item itemvalue="Application.HelloWordSender" />
       </list>
     </recent_temporary>
   </component>
@@ -238,7 +300,7 @@
       <workItem from="1639971500204" duration="350000" />
       <workItem from="1639971862174" duration="147000" />
       <workItem from="1639972061034" duration="5586000" />
-      <workItem from="1640047596200" duration="9824000" />
+      <workItem from="1640047596200" duration="22244000" />
     </task>
     <servers />
   </component>
@@ -252,16 +314,6 @@
           <url>jar://$PROJECT_DIR$/../../apache-maven-3.8.3/local_repository/com/rabbitmq/amqp-client/5.14.0/amqp-client-5.14.0-sources.jar!/com/rabbitmq/client/impl/AbstractMetricsCollector.java</url>
           <line>219</line>
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$PROJECT_DIR$/../../apache-maven-3.8.3/local_repository/com/rabbitmq/amqp-client/5.14.0/amqp-client-5.14.0-sources.jar!/com/rabbitmq/client/impl/ConsumerWorkService.java</url>
-          <line>106</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>jar://$PROJECT_DIR$/../../apache-maven-3.8.3/local_repository/com/rabbitmq/amqp-client/5.14.0/amqp-client-5.14.0-sources.jar!/com/rabbitmq/client/impl/recovery/AutorecoveringChannel.java</url>
-          <line>587</line>
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

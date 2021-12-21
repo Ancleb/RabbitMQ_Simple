@@ -1,4 +1,4 @@
-package com.yyl;
+package com.yyl.helloword;
 
 import com.rabbitmq.client.*;
 import com.rabbitmq.client.impl.CredentialsProvider;
@@ -13,10 +13,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 /**
+ * 当启动多个consumer监听一个队列时，队列中的1个消息不会同时被n个consumer消费。
+ * broker会使用软负载均衡方式把队列中的消息push到不同的consumer上。
  * @author yyl
  * 2021/12/21 9:03
  */
-public class HelloReceiver {
+public class HelloWordReceiver {
     private static final String QUEUE_NAME = "hello_queue";
 
     public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
@@ -28,6 +30,7 @@ public class HelloReceiver {
         // 默认virtualHost：/
         connectionFactory.setVirtualHost("/Abstract");
         connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("abstract", "2692440667"));
+        // consumer不能将connection和channel放到try-with-block语句中。流一旦被关闭，程序将执行结束。
         Connection connection = connectionFactory.newConnection();
         System.out.println("connection.getChannelMax() = " + connection.getChannelMax());
         Channel channel = connection.createChannel();
@@ -41,10 +44,10 @@ public class HelloReceiver {
             System.out.println(body);
 
             // 手动确认 manual acknowledgement
-            // channel.basicAck(message.getEnvelope().getDeliveryTag(), true);
+            channel.basicAck(message.getEnvelope().getDeliveryTag(), true);
         };
         // channel.basicConsume(QUEUE_NAME, false, deliverCallback, consumerTag -> {});
-        channel.basicConsume(QUEUE_NAME, true, "自定义ConsumerTag", deliverCallback, consumerTag -> {});
+        channel.basicConsume(QUEUE_NAME, false, "自定义ConsumerTag", deliverCallback, consumerTag -> {});
 
     }
 }
