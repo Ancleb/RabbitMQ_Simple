@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c8e279ea-9a08-4aa2-9b50-cf868284f268" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/helloword/HelloWordReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/HelloSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/rebbitmq-hello/src/main/java/com/yyl/helloword/HelloWordSender.java" afterDir="false" />
-    </list>
+    <list default="true" id="c8e279ea-9a08-4aa2-9b50-cf868284f268" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -300,7 +297,7 @@
       <workItem from="1639971500204" duration="350000" />
       <workItem from="1639971862174" duration="147000" />
       <workItem from="1639972061034" duration="5586000" />
-      <workItem from="1640047596200" duration="22244000" />
+      <workItem from="1640047596200" duration="23761000" />
     </task>
     <servers />
   </component>

@@ -28,7 +28,7 @@ public class WorkQueueWorker {
 
     public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://guest:guest@www.youngeryang.top/%2FAbstract");
         try{
             Connection connection = connectionFactory.newConnection();
 
