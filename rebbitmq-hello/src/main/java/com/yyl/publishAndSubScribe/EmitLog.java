@@ -25,12 +25,12 @@ public class EmitLog {
 
     public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://guest:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
 
         try (Connection connection = connectionFactory.newConnection();
              Channel channel = connection.createChannel()) {
             //创建exchange
-            channel.exchangeDeclare(EXCHANGES_NAME, BuiltinExchangeType.FANOUT, false, true, null);
+            channel.exchangeDeclare(EXCHANGES_NAME, BuiltinExchangeType.FANOUT, true, false, null);
 
 
 

@@ -25,7 +25,7 @@ public class ReceiveLogs {
 
     public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://guest:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
         Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -35,11 +35,20 @@ public class ReceiveLogs {
         // 将临时队列绑定到logsExchange上。
         channel.queueBind(queueName, EXCHANGES_NAME, "");
 
+        // 一次只给我push1个消息
+        channel.basicQos(1);
+
         DeliverCallback deliverCallback = (consumerTag, message) -> {
             System.out.println("consumerTag = " + consumerTag);
             String body = new String(message.getBody(), message.getProperties().getContentEncoding());
             System.out.println(body);
 
+            try {
+                // 模拟处理消息很满，故意造成消息堆积
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             // manual acknowledgement
             channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
         };
