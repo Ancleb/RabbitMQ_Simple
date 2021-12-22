@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
@@ -21,9 +23,9 @@ public class EmitLogTopic {
     private static final String EXCHANGE_NAME = "topic_logs";
     private static final String[] severity = {"info", "warn", "error"};
 
-    public static void main(String[] args) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public static void main(String[] args) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
         Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
 
@@ -32,17 +34,22 @@ public class EmitLogTopic {
 
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
         AMQP.BasicProperties basicProperties = MessageProperties.TEXT_PLAIN.builder().contentEncoding(StandardCharsets.UTF_8.name()).build();
-        channel.basicPublish(EXCHANGE_NAME, routingKey, basicProperties, message.getBytes(StandardCharsets.UTF_8));
-        System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+
+        while (true){
+            channel.basicPublish(EXCHANGE_NAME, routingKey, basicProperties, message.getBytes(StandardCharsets.UTF_8));
+            System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+            Thread.sleep(1000);
+        }
+
     }
 
     private static String getMessage() {
-        return String.format("[%s] %s 系统运行日志", DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL),
+        return String.format("[%s] %s 系统运行日志", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM).format(new Date()),
                 severity[(int)(Math.random() * 10) % severity.length]);
     }
 
     private static String getRoutingKey(String[] args) {
-        if (Objects.equals(args[0], "")){
+        if (!Objects.equals(args[0], "")){
             return args[0];
         }
         System.out.println("usage: javac EmitLogTopic routing_key");
