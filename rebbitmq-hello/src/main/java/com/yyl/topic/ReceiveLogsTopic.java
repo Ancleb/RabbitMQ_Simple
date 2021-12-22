@@ -43,6 +43,12 @@ public class ReceiveLogsTopic {
 
             // manual acknowledgement
             channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println();
         };
 
 
