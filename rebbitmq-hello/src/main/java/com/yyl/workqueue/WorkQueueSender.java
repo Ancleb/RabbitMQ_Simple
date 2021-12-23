@@ -22,7 +22,7 @@ public class WorkQueueSender {
     public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setVirtualHost("/Abstract");
-        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("abstract", "2692440667"));
+        connectionFactory.setCredentialsProvider(new DefaultCredentialsProvider("abstract", "guest"));
         connectionFactory.setHost("www.youngeryang.top");
         connectionFactory.setPort(5672);
         try (Connection connection = connectionFactory.newConnection();
