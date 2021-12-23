@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -26,63 +27,71 @@ import java.util.concurrent.TimeoutException;
  * @author yyl
  * 2021/12/23 11:28
  */
-public class RPCClient {
+public class RPCClient implements AutoCloseable{
 
-    private static final String RPC_QUEUE = "rpc_queue";
-    private static String REPLAY_QUEUE = null;
-    private static BlockingQueue<String> responses = new ArrayBlockingQueue<>(1);
+    private Connection connection;
+    private Channel channel;
+    private String requestQueueName = "rpc_queue";
 
-
-    private static Channel getChannel() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
+    public RPCClient() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
         connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
-        Connection connection = connectionFactory.newConnection();
-        return connection.createChannel();
+        connection = connectionFactory.newConnection();
+        channel = connection.createChannel();
     }
 
-    public static void main(String[] args) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
-        Channel channel = getChannel();
-        // 任务要发送到的队列
-        channel.queueDeclare(RPC_QUEUE, true, true, true, null);
-        // client监听任务结果的回调队列
-        REPLAY_QUEUE = channel.queueDeclare().getQueue();
-
-
-        startReceiveResult(channel);
-        startSendTask(channel);
-    }
-
-    /**
-     * 开始接收结果
-     */
-    private static void startReceiveResult(Channel channel) throws IOException {
-        
-    }
-
-
-    /**
-     * 开始发送任务
-     */
-    private static void startSendTask(Channel channel) throws IOException {
-
-        // 和此次消息相关联的ID
-        String correlationId = UUID.randomUUID().toString();
-
-        // 创建消息属性对象，包含correlationId和replyQueue
-        AMQP.BasicProperties basicProperties = new AMQP.BasicProperties().builder().correlationId(correlationId).replyTo(REPLAY_QUEUE).contentType("text/plain").contentEncoding(StandardCharsets.UTF_8.name()).build();
-
-        // 发送32个rpc，让客户端去消费消息
-        for (int i = 0; i < 32; i++) {
-            System.out.println(" [x] Requesting fib(" + i + ")");
-            channel.basicPublish("", RPC_QUEUE, basicProperties, String.valueOf(i).getBytes(StandardCharsets.UTF_8));
+    public static void main(String[] args) {
+        try (RPCClient fibonacciRpc = new RPCClient()) {
+            for (int i = 0; i < 50; i++) {
+                System.out.println(" [x] Requesting fib(" + i + ")");
+                String response = fibonacciRpc.call(Integer.toString(i));
+                System.out.println(" [.] Got '" + response + "'");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
 
+    /**
+     * 远程调用 一次rpc远程调用，将会产生一个consumer，用于等待rpc的结果返回，返回结果后，消费者自我删除。
+     * @param message 调用参数
+     */
+    public String call(String message) throws IOException, InterruptedException {
+        final String correlationId = UUID.randomUUID().toString();
+        // rpc调用结果会投递到replyQueue队列中
+        String replyQueueName = channel.queueDeclare().getQueue();
+        AMQP.BasicProperties basicProperties = new AMQP.BasicProperties().builder()
+                .contentType("text/plain").contentEncoding(StandardCharsets.UTF_8.name())
+                .correlationId(correlationId).replyTo(replyQueueName)
+                .build();
+        // 开始rpc远程调用
+        // 因为上次server未能消费的大斐波那契数在队列中堆积，在RpcServer重启后，会继续接着消费，所以要清楚队列中的消息。
+        channel.queuePurge(requestQueueName);
+        channel.basicPublish("", requestQueueName, basicProperties, message.getBytes(StandardCharsets.UTF_8));
 
+        // 存放rpcResponse的阻塞队列。（也可以使用对象锁的方式阻塞线程）
+        final BlockingQueue<String> responses = new ArrayBlockingQueue<>(1);
 
+        String curConsumerTag = channel.basicConsume(replyQueueName, (consumerTag, msg) -> {
+            System.out.println("consumerTag = " + consumerTag);
+            // 如果
+            if (Objects.equals(msg.getProperties().getCorrelationId(), correlationId)){
+                responses.offer(new String(msg.getBody(), msg.getProperties().getContentEncoding()));
+            }
+        }, consumerTag -> System.out.println("consumerTag:" + consumerTag + "：取消订阅"));
 
+        // take：若首位为空，则线程阻塞，直到首位有对象，并将对象取出。
+        String result = responses.take();
+        // 消费者取消订阅
+        // 用于监听rpc结果消息队列的消费者。   也就意味着一次rpc远程调用，将会产生一个consumer，用于等待rpc的结果返回，返回结果后，消费者自我删除。
+        channel.basicCancel(curConsumerTag);
+        return result;
+    }
 
-
-
+    @Override
+    public void close() throws Exception {
+        channel.close();
+        connection.close();
+    }
 }
