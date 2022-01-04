@@ -28,7 +28,7 @@ public class LimitPublisher {
 
     public static Channel getChannel() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
         return connectionFactory.newConnection().createChannel();
     }
 

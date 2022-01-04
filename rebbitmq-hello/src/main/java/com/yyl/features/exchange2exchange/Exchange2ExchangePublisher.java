@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class Exchange2ExchangePublisher {
     private static Channel getChannel() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
         return connectionFactory.newConnection().createChannel();
     }
 
