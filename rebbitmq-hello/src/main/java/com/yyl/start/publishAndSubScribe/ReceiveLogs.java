@@ -1,4 +1,4 @@
-package com.yyl.publishAndSubScribe;
+package com.yyl.start.publishAndSubScribe;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -7,7 +7,6 @@ import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;

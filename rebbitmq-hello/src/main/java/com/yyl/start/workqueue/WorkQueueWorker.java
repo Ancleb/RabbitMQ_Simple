@@ -1,4 +1,4 @@
-package com.yyl.workqueue;
+package com.yyl.start.workqueue;
 
 import com.rabbitmq.client.*;
 

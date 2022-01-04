@@ -1,4 +1,4 @@
-package com.yyl.publishAndSubScribe;
+package com.yyl.start.publishAndSubScribe;
 
 import com.rabbitmq.client.*;
 
@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeoutException;
 

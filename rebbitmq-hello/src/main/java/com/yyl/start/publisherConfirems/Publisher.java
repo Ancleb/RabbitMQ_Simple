@@ -1,4 +1,4 @@
-package com.yyl.publisherConfirems;
+package com.yyl.start.publisherConfirems;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeoutException;
@@ -27,7 +27,7 @@ public class Publisher {
 
     private static Channel getChannel() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
         connection = connectionFactory.newConnection();
         return connection.createChannel();
     }
@@ -84,7 +84,7 @@ public class Publisher {
 
         AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder().contentType("text/plain").contentEncoding(StandardCharsets.UTF_8.name()).build();
         for (int i = 0; i < 10; i++) {
-            String message = "策略1：单独发布消息, i = " + i;
+            String message = "策略2：单独发布消息, i = " + i;
 
             // 简单的发布一个消息
             channel.basicPublish("", queue, basicProperties, message.getBytes(StandardCharsets.UTF_8));
@@ -121,16 +121,22 @@ public class Publisher {
             // 重新发布被nack-ed的消息虽然看起来很好，但是应该避免这样做。
             // 因为确认回调是在I/O线程中分派的，在回调中不应该使用channel执行操作。更好的解决方案是使用一个队列，在消息发布线程和回调线程之间进行通信。发布线程轮询读取队列中的消息。
         });
+        channel.addReturnListener((replyCode, replyText, exchange, routingKey, properties, body) -> {
+            // 消息被broker返回。
+            System.out.printf("replyCode:%s, replyText:%s,exchange:%s, routingKey:%s, properties:%s, body:%s", replyCode, replyText, exchange, routingKey, properties, new String(body));
+        });
 
 
 
         AMQP.BasicProperties basicProperties = new AMQP.BasicProperties.Builder().contentEncoding("text/plain").contentEncoding(StandardCharsets.UTF_8.name()).build();
         for (int i = 0; i < 10; i++) {
-            String message = "策略1：单独发布消息, i = " + i;
+            String message = "策略3：单独发布消息, i = " + i;
             // 简单的发布一个消息
             long nextPublishSeqNo = channel.getNextPublishSeqNo(); // 在确认模式下，返回下一条要发布的消息的序列号。deliverTag
             outStandingConfirms.put(nextPublishSeqNo, message);
-            channel.basicPublish("", queue, basicProperties, message.getBytes(StandardCharsets.UTF_8));
+            // mandatory:生产者需要知道消息是否能够正确的到达至少一个队列，则可以将mandatory置为true，消息路由失败后将会被broker返回给客户端的到ReturnListener回调。 如果为false则broker直接丢弃消息。
+            // immediate:立即将消息推送给消费者。如何消息被路由到的所有队列中没有一个消费者，则broker直接将消息返回给客户端的ReturnListener中。但是sdk中的接口说明好像并没有实现这个属性的功能。
+            channel.basicPublish("", queue, true, false, basicProperties, message.getBytes(StandardCharsets.UTF_8));
         }
 
         System.out.printf("正在等待自上次confirms后发送的消息被全部被确认%n");
@@ -138,6 +144,7 @@ public class Publisher {
 
 
         // broker没有成功确认的消息。
-        System.out.println(outStandingConfirms);
+        System.out.println("等待确认的消息：" + outStandingConfirms);
+        new Scanner(System.in).next();
     }
 }

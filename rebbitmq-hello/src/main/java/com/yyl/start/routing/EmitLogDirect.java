@@ -1,4 +1,4 @@
-package com.yyl.routing;
+package com.yyl.start.routing;
 
 import com.rabbitmq.client.*;
 

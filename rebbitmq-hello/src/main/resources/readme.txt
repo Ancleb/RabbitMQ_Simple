@@ -1,0 +1,28 @@
+1. immediate：rabbitmq服务器好像没有实现这个属性的功能
+2. 声明message和queue和policy都设置了消息的TTL，则消息的TTL由三者最短的一个TTL决定，设置为0则除非消息立即被发送给消费者，否则消息过期。
+3. 声明queue和设置policy时都设置了队列的最大长度或正文消息容量，则最终的临界值将由二者最小的一个值决定。
+4. 在所有的情况下，计算队列的长度或者容量时都只是用就绪状态的消息。和unack的消息没有关系。
+5. 过期的消息只有到达queue的头部时，broker才会对这个消息执行丢弃，死信或其他操作。
+6. queue的TTL是从没有消费者使用时开始计算。durable的队列在broker重启后会自动续期。queueDeclare方法也会重新续期队列的TTL
+7. 当队列的长度或大小达到最大值时，broker的默认行为是从队列头部删除或者死信掉消息。  可以queue的溢出行为设置为拒绝发布。通过声明时的参数x-overflow设置drop-head,reject-publish,reject-publish-dlx
+8. 懒加载队列：队列中的持久消息会被尽可能早的保存在磁盘中。只有consumer请求时才将磁盘中的消息加载到RAM内存中。懒加载队列的主要目标之一是能够支持超长队列（百万消息）。 声明参数：x-queue-mode：（lazy，default）
+9. message可以被持久化到硬盘的前提条件是queue的durable是true。
+10. broker的队列溢出默认解决方案是drop-head，并成功接收消息。
+11. queue默认不支持优先级功能。指定了max-priority的queue，才支持消息的priority属性。否则将忽视掉消息的优先级属性。
+12. queue支持的优先级范围是0-255，官方推荐最大设置为10。具体根据业务场景定义。每个优先级都有一些磁盘内存CPU的资源成本，所以不希望创建太多的优先级。
+13. queue开启了优先级功能时，如果消息不指定priority属性，则默认为0，当超出max-priority时被视为max-priority的值。
+14. queue开启priority权重功能后，需要注意consumer是有没有指定preCount欲取值，应尽量避免一批消息到达queue之后立马被一个consumer全部接收，这样queue将无法对这一批消息使用优先级策略进行排序。
+15. 因为第5条的原因，可能存在一种情况：高优先级的消息再队列的头部，低优先级的消息已经过期，但是过期的消息仍然存在于队列中，并且参与队列信息的统计中。
+16. 因为第10条的原因，头部较高优先级的消息可能会被强制删除，这时较低优先级的消息将会成为队列的头部。这可能不是我们所期望的情况。
+17. policy策略不支持定义queue的max-priority，因为policy策略通常定义的是在队列声明后可以动态调整变更的属性，而max-priority永远不会再声明之后再被更改。
+18. RabbitMQ重新定义了basic.qos中preCount和global的意义。RabbitMQ中：global为true，preCount限制范围在Channel上，否则是针对每个Consumer。AMQP-0-9-1中：global为true，preCount限制范围在Connection上，否则限制范围在Channel上。0为无上限
+19. 只有unack的消息未达到限制时,consumer才会接收到新的消息。
+20. basic.qos作用于channel要比作用于consumer的资源开销更高，因为需要协调通道和不同队列上实行限制。
+21. 消费者优先级：broker确保高优先级的consumer在活动状态时总会第一时间接收到消息，只有当高优先级的consumer在阻塞状态时，消息才会发送到低优先级的consumer。
+22. exchange也可以被看成queue，使用绑定关系绑定到另一个exchange，source_exchange可以根据绑定关系将消息副本路由到destination_exchange
+23. 对于defaultExchange来说，所有的queue都默认与之绑定，bing_key将空字符串视为队列名。其他的directExchange绑定队列时，bing_key将空字符串视为普通的字符串。
+24. 队列的过期不会死信队列中的消息。满足过期的条件（消息过期，客户端拒绝消息，超出队列限制被broker拒绝）
+25. 消息没有被成功路由到队列时，消息不能被死信。而是被路由到AlternateExchange，如果有。
+26. 死信再被路由到死信交换机时可以根据原队列的arg配置替换新的routing_key。
+27. 当消息称为死信时，消息会被broker添加x-death属性，该属性内部包含了消息的许多原始信息以及消息每次死信的原因和来源。
+28. AlternateExchange本身也可以通过args参数指定自己的AlternateExchange，消息会按照AE链继续进行路由传递，直到到达AE链的末端。

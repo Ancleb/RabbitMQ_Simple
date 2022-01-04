@@ -1,4 +1,4 @@
-package com.yyl.helloword;
+package com.yyl.start.helloword;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;

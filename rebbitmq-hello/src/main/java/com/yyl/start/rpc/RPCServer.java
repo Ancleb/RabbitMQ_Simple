@@ -1,4 +1,4 @@
-package com.yyl.rpc;
+package com.yyl.start.rpc;
 
 import com.rabbitmq.client.*;
 

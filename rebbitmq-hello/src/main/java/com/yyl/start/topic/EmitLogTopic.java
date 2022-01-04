@@ -1,4 +1,4 @@
-package com.yyl.topic;
+package com.yyl.start.topic;
 
 import com.rabbitmq.client.*;
 
@@ -11,7 +11,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeoutException;
 
 /**

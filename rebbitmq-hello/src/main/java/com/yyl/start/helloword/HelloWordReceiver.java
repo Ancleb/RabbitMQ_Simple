@@ -1,11 +1,9 @@
-package com.yyl.helloword;
+package com.yyl.start.helloword;
 
 import com.rabbitmq.client.*;
-import com.rabbitmq.client.impl.CredentialsProvider;
 import com.rabbitmq.client.impl.DefaultCredentialsProvider;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
