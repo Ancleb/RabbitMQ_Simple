@@ -1,9 +1,11 @@
 package rabbitmq.boot.config;
 
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * rabbitmq配置类
@@ -36,7 +38,42 @@ public class RabbitmqConfig {
     }
 
     @Bean
-    public Queue queueNormal(){
-        return new Queue()
+    public Queue queueNormal10(){
+        Map<String, Object> queueArgs = new HashMap<>();
+        queueArgs.put("x-dead-letter-exchange", delayDeadEx);
+        queueArgs.put("x-dead-letter-routing-key", "usableMessage");
+        // queueArgs.put("x-message-ttl", 10000);
+        return new Queue(delayNormalQueue10, true, false, false, queueArgs);
     }
+
+    @Bean
+    public Queue queueNormal20(){
+        Map<String, Object> queueArgs = new HashMap<>(3);
+        queueArgs.put("x-dead-letter-exchange", delayDeadEx);
+        queueArgs.put("x-dead-letter-routing-key", "usableMessage");
+        // queueArgs.put("x-message-ttl", 10000);
+        return new Queue(delayNormalQueue20, true, false, false, queueArgs);
+    }
+
+    @Bean
+    public Queue delayDeadQueue(){
+        return QueueBuilder.durable(delayUsableQueue).build();
+    }
+
+
+    @Bean
+    public Binding bindingNormal10(){
+        return new Binding(delayNormalQueue10, Binding.DestinationType.QUEUE, delayNormalEx, delayNormalQueue10, null);
+    }
+
+    @Bean
+    public Binding bindingNormal20(){
+        return new Binding(delayNormalQueue20, Binding.DestinationType.QUEUE, delayNormalEx, delayNormalQueue20, null);
+    }
+
+    @Bean
+    public Binding bindingDeadQueue(){
+        return BindingBuilder.bind(delayDeadQueue()).to(directDeadEx()).with("usableMessage");
+    }
+
 }
