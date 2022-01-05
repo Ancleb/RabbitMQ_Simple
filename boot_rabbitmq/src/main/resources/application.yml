@@ -1,0 +1,3 @@
+spring:
+  rabbitmq:
+    addresses: amqp://abstract:2692440667@www.yongeryang.top/%2FAbstract
