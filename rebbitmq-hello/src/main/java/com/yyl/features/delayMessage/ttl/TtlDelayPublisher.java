@@ -1,16 +1,23 @@
 package com.yyl.features.delayMessage.ttl;
 
+import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 基于TTL的消息发布。
@@ -22,7 +29,7 @@ public class TtlDelayPublisher {
 
     private static Channel getChannel() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
         return connectionFactory.newConnection().createChannel();
     }
 
@@ -44,6 +51,24 @@ public class TtlDelayPublisher {
         // 声名死信队列，绑定上死信交换机。
         String delayUsableQueue = channel.queueDeclare("delayUsableQueue", true, false, false, null).getQueue();
         channel.queueBind(delayUsableQueue, delayDeadEx, "usableMessage");
+
+        List<String> msgs = getMessage();
+        for (String msg : msgs) {
+            boolean flag = Math.random() < 0.5;
+            String targetQueue = flag ? second10 : second20;
+            String targetExpire = flag ? "10000" : "20000";
+            channel.basicPublish("", targetQueue, true, new AMQP.BasicProperties.Builder().expiration(targetExpire).build(), msg.getBytes(StandardCharsets.UTF_8));
+        }
+        System.out.println("消息发送完成");
+        System.exit(0);
+    }
+
+
+    /*
+        生产随机消息
+     */
+    public static List<String> getMessage(){
+        return Stream.iterate(0, pre -> pre + 1).limit(10).map(i -> "第" + i + "条消息, 投递时间：" + DateFormat.getTimeInstance().format(new Date())).collect(Collectors.toList());
     }
 
 }

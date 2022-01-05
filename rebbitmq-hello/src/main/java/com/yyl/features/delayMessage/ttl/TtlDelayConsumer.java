@@ -18,11 +18,16 @@ import java.util.concurrent.TimeoutException;
 public class TtlDelayConsumer {
     public static Channel getChannel() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setUri("amqp://abstract:guest@www.youngeryang.top/%2FAbstract");
+        connectionFactory.setUri("amqp://abstract:2692440667@www.youngeryang.top/%2FAbstract");
         return connectionFactory.newConnection().createChannel();
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws URISyntaxException, NoSuchAlgorithmException, IOException, KeyManagementException, TimeoutException {
+        Channel channel = getChannel();
+        String delayUsableQueue = channel.queueDeclare("delayUsableQueue", true, false, false, null).getQueue();
+        channel.basicConsume(delayUsableQueue, (consumerTag, message) -> {
+            System.out.println("message = " + new String(message.getBody()) + "; headers = " + message.getProperties().getHeaders());
+            channel.basicAck(message.getEnvelope().getDeliveryTag(), false);
+        }, consumerTag -> {});
     }
 }
