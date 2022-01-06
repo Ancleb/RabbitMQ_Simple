@@ -1,0 +1,6 @@
+spring:
+  rabbitmq:
+    addresses: amqp://abstract:guest@www.youngeryang.top//Abstract
+  mvc:
+    servlet:
+      load-on-startup: 1

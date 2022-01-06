@@ -13,7 +13,7 @@ import java.util.Map;
  * 2022/1/5 16:06
  */
 @Configuration
-public class RabbitmqConfig {
+public class RabbitmqDecalerConfig {
 
     // 普通交换机
     private static final String delayNormalEx = "delay_normal_ex";

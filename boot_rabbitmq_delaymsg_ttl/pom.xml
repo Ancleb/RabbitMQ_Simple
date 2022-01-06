@@ -11,8 +11,8 @@
   <groupId>com.yyl</groupId>
   <artifactId>boot_rabbitmq</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>boot_rabbitmq</name>
-  <description>Demo project for Spring Boot</description>
+  <name>boot_rabbitmq_delaymsg_ttl</name>
+  <description>基于ttl死信交换机实现的延迟消息</description>
   <properties>
     <java.version>11</java.version>
   </properties>

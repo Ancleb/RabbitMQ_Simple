@@ -24,6 +24,7 @@ import java.util.Date;
 @RequestMapping("ttl")
 @Slf4j
 public class RabbitController {
+
     @Autowired
     private AmqpTemplate amqpTemplate;
 
