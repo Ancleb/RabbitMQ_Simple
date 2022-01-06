@@ -29,7 +29,7 @@ public class RabbitDeclare {
     /**
      * 声明一个队列
      */
-    // @Bean // 不使用@Bean看看是否可以声明出来Queue
+    @Bean // 不使用@Bean不能声明出来Queue
     public Queue delayMessageQueue(){
         return QueueBuilder.durable("delayPluginQueue").build();
     }
