@@ -12,3 +12,4 @@
 7. 在发送消息时，使用MessageConverter将消息转换成Message对象后，如果有将手动使用MessagePostProcessor修改Properties和Header。
 8. spring对rabbitmq提供了重试机制，如果对broker的请求发生了异常（不论是broker拒绝操作还是连接异常），则会执行重试操作，多次重试后仍请求失败，则放弃此次操作。
 9. spring中send消息时的【mandatory = （returnCallback || correlationData.getId()） && mandatoryExpression】。其中如果开启了publisher-returns模式，则mandatoryExpression将被隐式置为true。template.mandatory=true的显示声明方式优先级更高。
+10.confirms-type确认模式有两种simple和correlated，simple是同步的等待broker返回，直到超时。 correlated是异步回调，通过业务上的correlatedDate确定哪些消息被发布了。
