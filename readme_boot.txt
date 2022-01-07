@@ -7,7 +7,8 @@
 2. Spring会扫描容器中的所有Ex，Queue，Bindings并声明他们。
 3. RabbitListenerAnnotationBeanPostProcessor类会扫描容器中所有声明的@RabbitListener，并声明其中的@Queue，@Exchange，@Binding
 4. @RabbitListener标记在方法上：会将所有被标记的方法都动态代理生成一个RabbitListener侦听器实例。
-5. Spring将消息的发送和接收时需要转换为byte[]的序列/反序列化操作抽象成了一个MessageConverter，其实现有 SimpleMessageConverter（默认,Serializable对象使用JDK的序列化方式）、Jackson2JsonMessageConverter 等
+5. Spring将消息的发送和接收时需要转换为byte[]的序列/反序列化操作抽象成了一个MessageConverter，其实现有 SimpleMessageConverter（默认,Serializable对象使用JDK的序列化方式）、Jackson2JsonMessageConverter 等。手动指定MessageConverter只需要在容器中注册一个Bean即可。
 6. RabbitTemplate修改MessageConverter只需要在容器中注册一个MessageConverter实现类即可，MQ的AutoConfiguration会自动从容器中寻找message，converter。不同的MessageConverter不能分别作用于一条消息的发送和接收，因为他们的转化方式和对header或properties的修改不相同。
 7. 在发送消息时，使用MessageConverter将消息转换成Message对象后，如果有将手动使用MessagePostProcessor修改Properties和Header。
 8. spring对rabbitmq提供了重试机制，如果对broker的请求发生了异常（不论是broker拒绝操作还是连接异常），则会执行重试操作，多次重试后仍请求失败，则放弃此次操作。
+9. spring中send消息时的【mandatory = （returnCallback || correlationData.getId()） && mandatoryExpression】。其中如果开启了publisher-returns模式，则mandatoryExpression将被隐式置为true。template.mandatory=true的显示声明方式优先级更高。
