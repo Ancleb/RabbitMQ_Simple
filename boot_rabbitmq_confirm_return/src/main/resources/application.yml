@@ -1,6 +1,6 @@
 spring:
   rabbitmq:
-    addresses: amqp://abstract:2692440667@www.youngeryang.top//Abstract
+    addresses: amqp://abstract:guest@www.youngeryang.top//Abstract
     # simple:同步等待confirm结果，直到超时。   correlated:异步回调。手动通过correlatedData判断哪些消息发布成功。
     publisher-confirm-type: simple
     # true：spring默认隐式将mandatory置为true。（如果不开启，将不能保证消息路由失败后通知发布者）。最终在send时，还需要配合其他属性来决定mandatory的值
