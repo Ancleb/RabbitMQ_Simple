@@ -19,5 +19,6 @@
         <module>rebbitmq-hello</module>
         <module>boot_rabbitmq_delaymsg_ttl</module>
         <module>boot_rabbitmq_delaymsg_plugin</module>
+        <module>boot_rabbitmq_confirm_return</module>
     </modules>
 </project>
