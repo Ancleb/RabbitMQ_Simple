@@ -1,6 +1,7 @@
 spring:
   rabbitmq:
-    addresses: amqp://abstract:2692440667@www.youngeryang.top//Abstract
+    addresses: amqp://abstract:guest@www.youngeryang.top//Abstract
+    publisher-confirm-type: simple
   mvc:
     servlet:
       load-on-startup: 1

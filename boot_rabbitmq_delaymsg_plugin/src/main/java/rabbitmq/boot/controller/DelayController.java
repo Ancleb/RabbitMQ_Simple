@@ -21,12 +21,13 @@ public class DelayController {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    @GetMapping("sendMessage/{msg}/{ttl}")
-    public String sendMessage(@PathVariable String msg, @PathVariable Integer ttl){
+    @GetMapping("sendMessage/{msg}/{delay}")
+    public String sendMessage(@PathVariable String msg, @PathVariable Integer delay){
+
         amqpTemplate.convertAndSend("delayMessageExchange", "delayPluginQueue", msg, message -> {
             message.getMessageProperties().setHeader("x-delay", 10000);
             return message;
         });
-        return "{" + DateFormat.getTimeInstance().format(new Date()) + "}消息发送成功:" + msg + ", ttl:" + ttl / 1000 + "s";
+        return "{" + DateFormat.getTimeInstance().format(new Date()) + "}消息发送成功:" + msg + ", delay:" + delay / 1000 + "s";
     }
 }
